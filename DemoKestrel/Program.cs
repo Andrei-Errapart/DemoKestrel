@@ -14,7 +14,7 @@ namespace DemoKestrel
     // Sample app from: https://github.com/dotnet/aspnetcore/tree/main/src/Servers/Kestrel/samples/SampleApp
     public class Program
     {
-        public static async void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             await CreateHostBuilder(args).Build().RunAsync();
         }
