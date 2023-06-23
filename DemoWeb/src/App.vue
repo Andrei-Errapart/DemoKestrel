@@ -82,6 +82,6 @@ let fetch_result = ref ('No result yet');
     <button @click="do_fetch()">Fetch URL from the server</button>
     <br/>
     <div>Result:</div>
-    <textarea v-model="ws_result" />
+    <textarea v-model="fetch_result" />
   </main>
 </template>
