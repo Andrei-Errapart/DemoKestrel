@@ -27,10 +27,9 @@ namespace DemoKestrel
             builder.UseConsoleLifetime(); // https://stackoverflow.com/questions/64837558/how-to-cancel-webhost-when-process-is-stopping
 
             var r = builder.ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseUrls("https://0.0.0.0:4444");
-                    webBuilder.UseStartup<Startup>();
-                });
+            {
+                webBuilder.UseStartup<Startup>();
+            });
             return r;
 
         }
