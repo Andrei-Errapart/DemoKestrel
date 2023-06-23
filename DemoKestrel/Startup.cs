@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +16,25 @@ namespace DemoKestrel
     {
         public const string AllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+        public readonly DemoSettings Settings = DemoSettings.Default();
+
+        public Startup(IConfiguration configuration)
+        {
+            configuration.GetSection("Demo").Bind(Settings);
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
-
-            services.AddAuthorization(options =>
+            if (!Settings.DisableAuthorization)
             {
-                options.FallbackPolicy = options.DefaultPolicy;
-            });
+                services.AddAuthentication(NegotiateDefaults.AuthenticationScheme).AddNegotiate();
+                services.AddAuthorization(options =>
+                {
+                    options.FallbackPolicy = options.DefaultPolicy;
+                });
+            }
 
             services.AddCors((options) =>
             {
@@ -47,8 +57,11 @@ namespace DemoKestrel
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            if (!Settings.DisableAuthorization)
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
 
             app.UseCors(AllowSpecificOrigins);
 
