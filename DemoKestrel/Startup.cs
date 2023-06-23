@@ -45,6 +45,8 @@ namespace DemoKestrel
                         policy.WithOrigins("*"); // TODO: maybe later disable it optionally in a configuration file.
                     });
             });
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,9 +66,11 @@ namespace DemoKestrel
             }
 
             app.UseCors(AllowSpecificOrigins);
+            app.UseWebSockets();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");

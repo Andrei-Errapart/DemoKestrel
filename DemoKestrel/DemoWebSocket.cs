@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DemoKestrel
 {
+    [ApiController]
     public class DemoWebSocket : ControllerBase
     {
         [Route("/ws")]
