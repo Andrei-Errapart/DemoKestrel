@@ -13,6 +13,8 @@ namespace DemoKestrel
 {
     public class Startup
     {
+        public const string AllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -22,6 +24,16 @@ namespace DemoKestrel
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = options.DefaultPolicy;
+            });
+
+            services.AddCors((options) =>
+            {
+                options.AddPolicy(
+                    name: AllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("*"); // TODO: maybe later disable it optionally in a configuration file.
+                    });
             });
         }
 
@@ -37,6 +49,8 @@ namespace DemoKestrel
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors(AllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
