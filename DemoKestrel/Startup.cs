@@ -59,13 +59,13 @@ namespace DemoKestrel
 
             app.UseRouting();
 
+            app.UseCors(AllowSpecificOrigins); // Required order: UseCors, UseAuthentication, UseAuthorization
             if (!Settings.DisableAuthorization)
             {
                 app.UseAuthentication();
                 app.UseAuthorization();
             }
 
-            app.UseCors(AllowSpecificOrigins);
             app.UseWebSockets();
 
             app.UseEndpoints(endpoints =>
